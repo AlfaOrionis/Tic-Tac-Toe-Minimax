@@ -1,16 +1,132 @@
+:root{
+--size: 220px
+
+
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-ul{
+.wrapper{
+    width: 528px;
+    height: 528px;
     margin: 0 auto;
-    border: 4px solid black;
     position: relative;
-    width: 608px;
+    overflow: hidden;
+}
+ul{ 
+    width: 488px;
+    height: 488px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 4px solid black;
     display: flex;
     flex-wrap: wrap;
+}
+li {
+    background-color: rgb(20, 189, 172);
+    border: 1px solid black;
+    box-sizing: border-box;
+    width: 160px;
+    height: 160px;
+    list-style: none;
+    position: relative;
+    }
+    li.cross::after{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: calc(var(--size)/20);
+        height: calc(var(--size)/1.85);
+        background-color: rgb(65, 65, 65);
+        transform:translate(-50%, -50%) rotate(45deg);
+        animation: appear .3s;
+    }
+    li.cross::before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: calc(var(--size)/20);
+        height: calc(var(--size)/1.85);
+        background-color: rgb(65, 65, 65);
+        transform:translate(-50%, -50%) rotate(-45deg);
+        animation: appear .3s forwards;
+        
+    }
+    
+    
+    
+    .circle {
+        height: calc(var(--size)/2);
+        width: calc(var(--size)/2);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white; 
+        position: relative;
+        overflow: hidden;
+    }
+    .circle::after{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: rgb(20, 189, 172);
+        height: 90%;
+        width: 90%;
+        border-radius: 50%;
+    }
+    
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    margin: 20px 0;
+
+}
+.title-wrap {
+    width: 33.3333%;
+    padding-left: 20px;
+}
+
+.reset-wrap {
+    width: 33.3333%;
+    text-align: center;
+}
+.additional-div {
+    width: 33.3333%;
+}
+.container h1{ 
+    font-family: Hubballi;
+    font-size: 3rem;
+color: rgb(54, 215, 199)}
+
+
+.container button{
+    background-color: #4c91af; 
+    border-radius: 5px ;
+    color: white;
+    padding: 15px 32px;
+    margin: 10px 0 0 0;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .container button:hover{background-color: #77bfde;}
+
+.container p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+font-size: 1.5rem;
 }
 
 .drawline {
@@ -34,88 +150,14 @@ animation: drawingVertical 1s ease;
 
 .diagonal {
     width: 8px;
-    animation: drawingVertical forwards 1s ease;
-}
-
-@keyframes drawingHorizontal {
-    from{ left: -5%; right: 105%;}
-    to{left: -5%; right: -5%;}
-}
-
-@keyframes drawingVertical {
-    from{ top: -5%; bottom: 105%;}
-    to{top: -5%; bottom: -5%;}
-}
-
-@keyframes drawingDiagonal {
-    from{height: 0%;}
-    to{height: 150%;}
-}
-
-li {
-background-color: rgb(20, 189, 172);
-border: 1px solid black;
-box-sizing: border-box;
-width: 200px;
-height: 200px;
-list-style: none;
-position: relative;
-}
-
-li.cross::after{
-    content: "";
-    position: absolute;
     top: 50%;
     left: 50%;
-    width: 10px;
-    height: 150px;
-    background-color: rgb(65, 65, 65);
-    transform:translate(-50%, -50%) rotate(45deg);
-    animation: appear .3s;
+    height: 180%;
 }
-li.cross::before{
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 10px;
-    height: 150px;
-    background-color: rgb(65, 65, 65);
-    transform:translate(-50%, -50%) rotate(-45deg);
-    animation: appear .3s forwards;
-    
-}
-
-
-
-.circle {
-    height: 140px;
-    width: 140px;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: white; 
-    position: relative;
-    overflow: hidden;
-}
-.circle::after{
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: rgb(20, 189, 172);
-    height: 90%;
-    width: 90%;
-    border-radius: 50%;
-}
-
 .box{
     position: absolute;
-    height: 100px;
-    width: 100px;
+    height: calc(var(--size)/4);
+    width: calc(var(--size)/4);
     background-color: rgb(20, 189, 172);
 }
 
@@ -127,29 +169,28 @@ li.cross::before{
 }
 
 .box-bottom-left{
-    top: 100px;
+    top: calc(var(--size)/4);
     left: 0;
     transform-origin: 100% 0;
-    animation: show-bottom-left .1s forwards .1s linear;
+    animation: show-bottom-left .1s .1s forwards linear;
+
 
 }
 
 .box-bottom-right{
-    top: 100px;
-    left: 100px;
+    top: calc(var(--size)/4);
+    left: calc(var(--size)/4);
     transform-origin: 0 0;
-    animation: show-bottom-right .1s forwards .2s linear;
+    animation: show-bottom-right .1s .2s forwards linear;
 }
 
 .box-top-right{
     top: 0;
-    left: 100px;
+    left: calc(var(--size)/4);
     transform-origin: 0 100%;
-    animation: show-top-right .1s forwards .3s linear;
+    animation: show-top-right .1s .3s forwards linear;
 
 }
-
-
 
 
 
@@ -162,8 +203,8 @@ li.cross::before{
 @keyframes show-top-left {
     0%{transform: skewX(0deg);}
     99.9%{
-        height: 100px;
-        width: 100px;
+        height: calc(var(--size)/4);
+        width: calc(var(--size)/4);
     }
     100%{
         height: 0;
@@ -173,8 +214,8 @@ li.cross::before{
 @keyframes show-bottom-left {
     0%{transform: skewY(0deg);}
     99.9%{
-        height: 100px;
-        width: 100px;
+        height: calc(var(--size)/4);
+        width: calc(var(--size)/4);
     }
     100%{
         height: 0;
@@ -185,8 +226,8 @@ li.cross::before{
 @keyframes show-bottom-right {
     0%{transform: skewX(0deg);}
     99.9%{
-        height: 100px;
-        width: 100px;
+        height: calc(var(--size)/4);
+        width: calc(var(--size)/4);
     }
     100%{
         height: 0;
@@ -197,11 +238,32 @@ li.cross::before{
 @keyframes show-top-right {
     0%{transform: skewY(0deg);}
     99.9%{
-        height: 100px;
-        width: 100px;
+        height: calc(var(--size)/4);
+        width: calc(var(--size)/4);
     }
     100%{
         height: 0;
         width: 0;
         transform: skewY(-90deg);}
+}
+
+
+@keyframes drawingHorizontal {
+    from{ left: -5%; right: 105%;}
+    to{left: -5%; right: -5%;}
+}
+
+@keyframes drawingVertical {
+    from{ top: -5%; bottom: 105%;}
+    to{top: -5%; bottom: -5%;}
+}
+
+@keyframes drawingDiagonalLeft {
+    from{left: -150%; top:-150%}
+    to{top: 50%; left: 50% ;}
+}
+
+@keyframes drawingDiagonalRight {
+    from{left:250%; top:-150%}
+    to{top: 50%; left: 50% ;}
 }

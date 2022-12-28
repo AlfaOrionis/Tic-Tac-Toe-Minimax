@@ -1,3 +1,6 @@
+//I am creating a circle with JS only because of animation,
+//The cross is made with just css (after and before pseudoelements) so there is no createCross function.
+
 export function createCircle(target) {
   let circle = document.createElement("div");
   let boxTopLeft = document.createElement("div");
