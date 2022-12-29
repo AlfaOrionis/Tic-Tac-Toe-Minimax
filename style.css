@@ -83,6 +83,21 @@ ul{
     cursor: pointer;
 }
 
+.win-text {
+    position: fixed;
+    top: 300px;
+    left: 50%;
+    transform: translate(-50%);
+    font-family: Hubballi;
+    font-weight: bold;
+    font-size: 5rem;
+    color: rgb(0, 255, 4);
+}
+
+@keyframes winTextAppear {
+    from{transform: translate(-50%) rotate(0) scale(0);}
+    to{ transform: translate(-50%) rotate(720deg);}
+}
 
 
 li {

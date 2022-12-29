@@ -27,10 +27,10 @@ resetScoreBtn.addEventListener("click", () => {
 });
 
 window.onbeforeunload = (e) => {
-  console.log(e);
   return " ";
 };
 
+//Leaving page equals d
 window.onunload = () => {
   if (!hasTheGameStarted) return;
   const score = JSON.parse(localStorage.getItem("score"));
@@ -77,14 +77,14 @@ function popUp() {
     closeModal(divModal, backdrop);
   });
   giveUpBtn.addEventListener("click", () => {
-    resetGame();
+    resetGame("give up");
     closeModal(divModal, backdrop);
   });
 
   console.log(cancelBtn);
 }
 
-function resetGame() {
+function resetGame(giveUp) {
   hasTheGameStarted = false;
   resetBtn.classList.add("disabled");
   //Clearing the board
@@ -108,8 +108,8 @@ function resetGame() {
     drawline[0].remove();
   }
 
-  //Uploading score, it means +1 for computer
-  uploadScore("O");
+  //Uploading score if giveUp, it means +1 for computer
+  giveUp && uploadScore("O");
 
   turn = "X";
   trn.textContent = turn;
@@ -150,11 +150,16 @@ function changeTurn() {
   resetBtn.classList.remove("disabled");
   const winner = checkIfWin(board);
   if (winner.winner) {
-    uploadScore(winner.winner);
-
-    animateWin(winner.winWay);
-
+    turn = "";
     trn.textContent = "WINNER" + " " + winner.winner;
+
+    uploadScore(winner.winner);
+    animateWin(winner);
+
+    setTimeout(() => {
+      resetGame();
+    }, 4000);
+
     return;
   } else if (getEmptyCells().length === 0) {
     trn.textContent = "TIE!";

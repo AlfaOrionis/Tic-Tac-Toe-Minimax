@@ -1,4 +1,5 @@
-export function animateWin(winWay) {
+export function animateWin({ winWay, winner }) {
+  //Animate drawline
   const div = document.createElement("div");
   //Horizontal case
   if (winWay.way === "horizontal") {
@@ -23,6 +24,28 @@ export function animateWin(winWay) {
         : "drawingDiagonalRight"
     } forwards 1s ease`;
   }
+
+  //Animate text
+
+  const text = document.createElement("p");
+
+  text.textContent = `WINNER : ${winner}`;
+  text.classList.add("win-text");
+  text.style.animation = "winTextAppear 1.5s";
+  setTimeout(() => {
+    document.body.append(text);
+  }, 500);
+
+  setTimeout(() => {
+    text.style.animation = "";
+  }, 2000);
+  setTimeout(() => {
+    text.style.animation = "winTextAppear 1.5s reverse";
+  }, 2500);
+
+  setTimeout(() => {
+    text.remove();
+  }, 4000);
 
   table.append(div);
 }
