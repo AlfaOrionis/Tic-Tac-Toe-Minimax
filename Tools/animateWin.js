@@ -28,12 +28,16 @@ export function animateWin({ winWay, winner }) {
   //Animate text
 
   const text = document.createElement("p");
+  const backdrop = document.createElement("div");
+
+  backdrop.classList.add("backdrop");
 
   text.textContent = `WINNER : ${winner}`;
   text.classList.add("win-text");
   text.style.animation = "winTextAppear 1.5s";
   setTimeout(() => {
     document.body.append(text);
+    document.body.append(backdrop);
   }, 500);
 
   setTimeout(() => {
@@ -45,6 +49,7 @@ export function animateWin({ winWay, winner }) {
 
   setTimeout(() => {
     text.remove();
+    backdrop.remove();
   }, 4000);
 
   table.append(div);
