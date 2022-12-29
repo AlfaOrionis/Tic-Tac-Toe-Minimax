@@ -19,10 +19,14 @@
   <h1>Tic Tac Toe!</h1>
 </div>
   <div class="reset-wrap">
-<p>Turn: <span id="turn"></span></p>
-<button id="reset">Reset</button>
+<p>Now playing: <span id="turn"></span></p>
+<button class="disabled" id="reset">Give up</button>
 </div>
-<div class="additional-div"></div>
+<div class="additional-div">
+  <p>Player: <span id="player-score"></span></p>
+  <p>Computer: <span id="computer-score"></span></p>
+  <button id="reset-score">Reset score</button>
+</div>
 </div>
 <div class="wrapper">
     <ul id="table">
