@@ -88,6 +88,8 @@ ul{
     z-index: 10;
     top: 300px;
     left: 50%;
+    min-width: 700px;
+    text-align: center;
     transform: translate(-50%);
     font-family: Hubballi;
     font-weight: bold;
@@ -98,6 +100,32 @@ ul{
 @keyframes winTextAppear {
     from{transform: translate(-50%) rotate(0) scale(0);}
     to{ transform: translate(-50%) rotate(720deg);}
+}
+
+.difficulty {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 300px;
+    left: 20px;
+    width: 200px;
+}
+.difficulty p {
+    font-family: Hubballi;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.difficulty button {
+    border-radius: 5px;
+    width: 120px;
+    padding: 15px;
+    margin: 5px 0;
+    cursor: pointer;
+}
+.active {
+    background-color: yellow;
 }
 
 
@@ -198,8 +226,8 @@ color: rgb(54, 215, 199)}
     cursor: pointer;
     font-size: 16px;
   }
-  button:hover{background-color: #77bfde;}
-
+  .container button:hover{background-color: #77bfde;}
+  
 .container p {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;

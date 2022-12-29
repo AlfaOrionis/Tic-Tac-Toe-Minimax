@@ -1,26 +1,62 @@
-import { createCircle } from "./Tools/createCircle.js";
-import { checkIfWin } from "./Tools/checkIfWin.js";
-import { animateWin } from "./Tools/animateWin.js";
+import { createCircle } from "./Tools/Animations/createCircle.js";
 import { mount } from "./Tools/mount.js";
-import { uploadScore } from "./Tools/uploadScore.js";
-import { resetScore } from "./Tools/resetScore.js";
+import { uploadScore } from "./Tools/GameFunctions/uploadScore.js";
+import { resetScore } from "./Tools/GameFunctions/resetScore.js";
+import { minimax } from "./Tools/ComputerActions/miniMax.js";
+import { getEmptyCells } from "./Tools/GameFunctions/getEmptyCells.js";
+import { miniMaxAction } from "./Tools/ComputerActions/miniMaxAction.js";
+import { randomAction } from "./Tools/ComputerActions/randomAction.js";
+import { popUp } from "./Tools/popUp.js";
+import { changeTurn } from "./Tools/GameFunctions/changeTurn.js";
+import { resetGame } from "./Tools/GameFunctions/resetGame.js";
 
 const trn = document.getElementById("turn");
 const liArray = document.getElementsByTagName("li");
 const resetBtn = document.getElementById("reset");
 const resetScoreBtn = document.getElementById("reset-score");
+const easyBtn = document.getElementById("easy");
+const hardBtn = document.getElementById("hard");
 
-mount(uploadScore);
+let state = {
+  board: [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ],
+  hasTheGameStarted: false,
+  turn: "X",
+  difficulty: false,
+};
+trn.textContent = state.turn;
 
-let turn = "X";
-let hasTheGameStarted = false;
-trn.textContent = turn;
+mount(uploadScore, easyBtn);
 
 for (let i = 0; i < liArray.length; i++) {
   liArray[i].addEventListener("click", playerAction);
 }
 
-resetBtn.addEventListener("click", popUp);
+easyBtn.addEventListener("click", () => {
+  if (state.hasTheGameStarted) {
+    alert("You cant change difficulty level during the game!");
+    return;
+  }
+  state.difficulty = false;
+  hardBtn.classList.remove("active");
+  easyBtn.classList.add("active");
+});
+hardBtn.addEventListener("click", () => {
+  if (state.hasTheGameStarted) {
+    alert("You cant change difficulty level during the game!");
+    return;
+  }
+  state.difficulty = true;
+  easyBtn.classList.remove("active");
+  hardBtn.classList.add("active");
+});
+
+resetBtn.addEventListener("click", () =>
+  popUp(state.hasTheGameStarted, resetGameHandler)
+);
 resetScoreBtn.addEventListener("click", () => {
   resetScore();
   uploadScore();
@@ -29,147 +65,51 @@ resetScoreBtn.addEventListener("click", () => {
 window.onbeforeunload = (e) => {
   return " ";
 };
-
-//Leaving page equals d
+//Leaving page equals defeat
 window.onunload = () => {
-  if (!hasTheGameStarted) return;
+  if (!state.hasTheGameStarted) return;
   const score = JSON.parse(localStorage.getItem("score"));
   score.computer++;
   return localStorage.setItem("score", JSON.stringify(score));
 };
 
-let board = [
-  ["", "", ""],
-  ["", "", ""],
-  ["", "", ""],
-];
-
-function closeModal(divModal, backdrop) {
-  divModal.remove();
-  backdrop.remove();
+function resetGameHandler(giveUp) {
+  resetGame(state, resetBtn, liArray, trn, uploadScore, giveUp);
 }
 
-function popUp() {
-  //Not gonna open if the game hasnt even started
-  if (!hasTheGameStarted) return;
-  const divModal = document.createElement("div");
-  const backdrop = document.createElement("div");
-
-  backdrop.classList.add("backdrop");
-
-  divModal.classList.add("modal");
-  divModal.innerHTML = `<div class='modal-div'>
-  <p>Are u sure u want to reset the game?
-   Resetting the game is tantamount to giving up! </p>
-   </div>
-   <div class='btn-div'><button id='cancel-btn'>Cancel</button>
-   <button id='give-up-btn'>Give up</button>
-   </div>
-   
-   `;
-  document.body.append(backdrop);
-  document.body.append(divModal);
-
-  const cancelBtn = document.getElementById("cancel-btn");
-  const giveUpBtn = document.getElementById("give-up-btn");
-
-  cancelBtn.addEventListener("click", () => {
-    closeModal(divModal, backdrop);
-  });
-  giveUpBtn.addEventListener("click", () => {
-    resetGame("give up");
-    closeModal(divModal, backdrop);
-  });
-
-  console.log(cancelBtn);
+function changeTurnHandler() {
+  changeTurn(
+    state.board,
+    resetBtn,
+    getEmptyCells,
+    trn,
+    state,
+    uploadScore,
+    resetGameHandler,
+    liArray,
+    computerAction
+  );
 }
-
-function resetGame(giveUp) {
-  hasTheGameStarted = false;
-  resetBtn.classList.add("disabled");
-  //Clearing the board
-  board = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ];
-  //Removing all the crosses
-  for (let i = 0; i < liArray.length; i++) {
-    liArray[i].removeAttribute("class", "cross");
-    //Removing all the circles
-    if (liArray[i].children[0]) {
-      liArray[i].removeChild(liArray[i].children[0]);
-    }
-  }
-  //removing drawline if there was a win
-  const drawline = document.getElementsByClassName("drawline");
-
-  if (drawline[0]) {
-    drawline[0].remove();
-  }
-
-  //Uploading score if giveUp, it means +1 for computer
-  giveUp && uploadScore("O");
-
-  turn = "X";
-  trn.textContent = turn;
-}
-
-const getEmptyCells = () => {
-  const arr = [];
-  for (let i = 0; i < 3; i++) {
-    for (let y = 0; y < 3; y++) {
-      !board[i][y] && arr.push([i, y]);
-    }
-  }
-  return arr;
-};
 
 function playerAction(e) {
-  hasTheGameStarted = true;
-
-  if (turn === "X") {
+  state.hasTheGameStarted = true;
+  if (state.turn === "X") {
     //Checking if the cell isnt already taken
     if (e.target.children.length > 0 || e.target.classList.length > 0) return;
     e.target.classList.add("cross");
-    board[Math.ceil(e.target.id / 3 - 1)][(e.target.id - 1) % 3] = "X";
-    changeTurn();
+    state.board[Math.ceil(e.target.id / 3 - 1)][(e.target.id - 1) % 3] = "X";
+
+    changeTurnHandler();
   }
 }
 function computerAction() {
-  const emptyCellsArr = getEmptyCells();
-  const randomCellIndex = Math.floor(Math.random() * emptyCellsArr.length);
-  const randomCell = emptyCellsArr[randomCellIndex];
-  const randomId = randomCell[0] * 3 + (randomCell[1] % 3);
-  createCircle(liArray[randomId]);
-  board[randomCell[0]][randomCell[1]] = "O";
-  changeTurn();
-}
+  //RANDOM
+  if (!state.difficulty)
+    randomAction(createCircle, state.board, liArray, getEmptyCells);
 
-function changeTurn() {
-  resetBtn.classList.remove("disabled");
-  const winner = checkIfWin(board);
-  if (winner.winner) {
-    turn = "";
-    trn.textContent = "WINNER" + " " + winner.winner;
+  //MINIMAX
+  if (state.difficulty)
+    miniMaxAction(minimax, createCircle, state.board, liArray);
 
-    uploadScore(winner.winner);
-    animateWin(winner);
-
-    setTimeout(() => {
-      resetGame();
-    }, 4000);
-
-    return;
-  } else if (getEmptyCells().length === 0) {
-    trn.textContent = "TIE!";
-    return;
-  } else if (turn === "X") {
-    turn = "O";
-
-    setTimeout(() => {
-      computerAction();
-    }, 1000);
-  } else if (turn === "O") turn = "X";
-  trn.textContent = turn;
+  changeTurnHandler();
 }

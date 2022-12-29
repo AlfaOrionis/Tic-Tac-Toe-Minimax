@@ -1,4 +1,6 @@
-export function animateWin({ winWay, winner }) {
+import { animateText } from "./animateText.js";
+
+export function animateLine({ winWay, winner }) {
   //Animate drawline
   const div = document.createElement("div");
   //Horizontal case
@@ -25,32 +27,7 @@ export function animateWin({ winWay, winner }) {
     } forwards 1s ease`;
   }
 
-  //Animate text
-
-  const text = document.createElement("p");
-  const backdrop = document.createElement("div");
-
-  backdrop.classList.add("backdrop");
-
-  text.textContent = `WINNER : ${winner}`;
-  text.classList.add("win-text");
-  text.style.animation = "winTextAppear 1.5s";
-  setTimeout(() => {
-    document.body.append(text);
-    document.body.append(backdrop);
-  }, 500);
-
-  setTimeout(() => {
-    text.style.animation = "";
-  }, 2000);
-  setTimeout(() => {
-    text.style.animation = "winTextAppear 1.5s reverse";
-  }, 2500);
-
-  setTimeout(() => {
-    text.remove();
-    backdrop.remove();
-  }, 4000);
+  animateText(winner);
 
   table.append(div);
 }
