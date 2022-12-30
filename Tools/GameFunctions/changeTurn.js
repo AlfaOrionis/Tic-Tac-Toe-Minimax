@@ -21,7 +21,7 @@ export function changeTurn(
     trn.textContent =
       "WINNER:" + " " + (winner.winner === "X" ? "Player" : "Computer");
 
-    uploadScore(winner.winner);
+    uploadScore(winner.winner, state.difficulty);
     animateLine(winner);
 
     setTimeout(() => {

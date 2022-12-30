@@ -16,7 +16,9 @@ const resetBtn = document.getElementById("reset");
 const resetScoreBtn = document.getElementById("reset-score");
 const easyBtn = document.getElementById("easy");
 const hardBtn = document.getElementById("hard");
-
+const computerBtn = document.getElementById("computer-starts");
+const playerBtn = document.getElementById("player-starts");
+console.log(computerBtn);
 let state = {
   board: [
     ["", "", ""],
@@ -29,11 +31,23 @@ let state = {
 };
 trn.textContent = state.turn;
 
-mount(uploadScore, easyBtn);
+mount(uploadScore, easyBtn, playerBtn);
 
 for (let i = 0; i < liArray.length; i++) {
   liArray[i].addEventListener("click", playerAction);
 }
+
+computerBtn.addEventListener("click", () => {
+  if (state.hasTheGameStarted) {
+    alert("The game has already started!");
+    return;
+  }
+  playerBtn.classList.remove("active");
+  computerBtn.classList.add("active");
+  state = { ...state, turn: "O", hasTheGameStarted: true };
+  console.log(state);
+  computerAction();
+});
 
 easyBtn.addEventListener("click", () => {
   if (state.hasTheGameStarted) {
@@ -41,6 +55,7 @@ easyBtn.addEventListener("click", () => {
     return;
   }
   state.difficulty = false;
+  uploadScore(false, state.difficulty);
   hardBtn.classList.remove("active");
   easyBtn.classList.add("active");
 });
@@ -50,6 +65,7 @@ hardBtn.addEventListener("click", () => {
     return;
   }
   state.difficulty = true;
+  uploadScore(false, state.difficulty);
   easyBtn.classList.remove("active");
   hardBtn.classList.add("active");
 });
@@ -58,8 +74,8 @@ resetBtn.addEventListener("click", () =>
   popUp(state.hasTheGameStarted, resetGameHandler)
 );
 resetScoreBtn.addEventListener("click", () => {
-  resetScore();
-  uploadScore();
+  resetScore(state.difficulty);
+  uploadScore(null, state.difficulty);
 });
 
 window.onbeforeunload = (e) => {
@@ -74,6 +90,8 @@ window.onunload = () => {
 };
 
 function resetGameHandler(giveUp) {
+  playerBtn.classList.add("active");
+  computerBtn.classList.remove("active");
   resetGame(state, resetBtn, liArray, trn, uploadScore, giveUp);
 }
 
@@ -103,6 +121,7 @@ function playerAction(e) {
   }
 }
 function computerAction() {
+  console.log("XD");
   //RANDOM
   if (!state.difficulty)
     randomAction(createCircle, state.board, liArray, getEmptyCells);

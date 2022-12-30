@@ -24,7 +24,7 @@ export function resetGame(state, resetBtn, liArray, trn, uploadScore, giveUp) {
   }
 
   //Uploading score if giveUp, it means +1 for computer
-  giveUp && uploadScore("O");
+  giveUp && uploadScore("O", state.difficulty);
 
   state.turn = "X";
   trn.textContent = state.turn;
